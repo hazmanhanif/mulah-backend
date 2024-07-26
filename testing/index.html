@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wired Headlines</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        ul { list-style-type: none; padding: 0; }
+        li { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Wired Headlines</h1>
+    <ul id="headline-list"></ul>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Papa.parse('headlines.csv', {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    const data = results.data;
+
+                    // Sort data by date, assuming date format is 'YYYY-MM-DD'
+                    data.sort((a, b) => new Date(b.Date) - new Date(a.Date));
+
+                    const list = document.getElementById('headline-list');
+                    data.forEach(item => {
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        a.href = item.Link;
+                        a.textContent = item.Title;
+                        a.target = '_blank'; // Open in a new tab
+                        li.appendChild(a);
+                        list.appendChild(li);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
